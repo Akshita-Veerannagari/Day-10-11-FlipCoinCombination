@@ -2,7 +2,7 @@
 
 declare -A coinFlipsSingle
 declare -A coinFlipsDouble
-
+declare -A coinFlipsTriple
 function singlet()
 {
         coinFlipsSingle["heads"]=0
@@ -72,6 +72,79 @@ function doublet()
 
 }
 
+function triplet()
+{
+        coinFlipsTriple["HHH"]=0
+        coinFlipsTriple["HHT"]=0
+        coinFlipsTriple["HTH"]=0
+        coinFlipsTriple["HTT"]=0
+        coinFlipsTriple["THH"]=0
+        coinFlipsTriple["THT"]=0
+        coinFlipsTriple["TTH"]=0
+        coinFlipsTriple["TTT"]=0
+
+        for(( counter=1; counter<=10; counter++ ))
+        do
+                num1=$(( RANDOM ))
+                num2=$(( RANDOM ))
+                num3=$(( RANDOM ))
+                if [ $(( num1 % 2)) -eq 0  ] && [ $(( num2%2 )) -eq 0 ]  && [ $((num3%2)) -eq 0 ]
+                then
+                        coinFlipsTriple["HHH"]=$(( ${coinFlipsTriple[HHH]}+1 ))
+                elif [ $(( num1 % 2)) -eq 0  ] && [ $(( num2%2 )) -eq 0 ]  && [ $((num3%2)) -eq 1 ]
+                then
+                        coinFlipsTriple["HHT"]=$(( ${coinFlipsTriple[HHT]}+1 ))
+                elif [ $(( num1 % 2)) -eq 0  ] && [ $(( num2%2 )) -eq 1 ]  && [ $((num3%2)) -eq 0 ]
+                then
+                        coinFlipsTriple["HTH"]=$(( ${coinFlipsTriple[HtH]}+1 ))
+                elif [ $(( num1 % 2)) -eq 0  ] && [ $(( num2%2 )) -eq 1 ]  && [ $((num3%2)) -eq 1 ]
+                then
+                        coinFlipsTriple["HTT"]=$(( ${coinFlipsTriple[HTT]}+1 ))
+                elif [ $(( num1 % 2)) -eq 1  ] && [ $(( num2%2 )) -eq 0 ]  && [ $((num3%2)) -eq 0 ]
+                then
+                        coinFlipsTriple["THH"]=$(( ${coinFlipsTriple[THH]}+1 ))
+                elif [ $(( num1 % 2)) -eq 1  ] && [ $(( num2%2 )) -eq 0 ]  && [ $((num3%2)) -eq 1 ]
+                then
+                        coinFlipsTriple["THT"]=$(( ${coinFlipsTriple[THT]}+1 ))
+                elif [ $(( num1 % 2)) -eq 1  ] && [ $(( num2%2 )) -eq 1 ]  && [ $((num3%2)) -eq 0 ]
+                then
+                        coinFlipsTriple["TTH"]=$(( ${coinFlipsTriple[TTH]}+1 ))
+
+                elif [ $(( num1 % 2)) -eq 1  ] && [ $(( num2%2 )) -eq 1 ]  && [ $((num3%2)) -eq 1 ]
+                then
+                        coinFlipsTriple["TTT"]=$(( ${coinFlipsTriple[TTT]}+1 ))
+
+                fi
+        done
+
+
+        for index in ${!coinFlipsTriple[@]}
+        do
+                echo "$index: ${coinFlipsTriple[$index]}"
+        done
+
+        percentage_HHH=`echo ${coinFlipsTriple["HHH"]} 10 100 | awk '{print ($1/$2)*$3}'`
+        percentage_HHT=`echo ${coinFlipsTriple["HHT"]} 10 100 | awk '{print ($1/$2)*$3}'`
+        percentage_HTH=`echo ${coinFlipsTriple["HTH"]} 10 100 | awk '{print ($1/$2)*$3}'`
+        percentage_HTT=`echo ${coinFlipsTriple["HTT"]} 10 100 | awk '{print ($1/$2)*$3}'`
+        percentage_THH=`echo ${coinFlipsTriple["THH"]} 10 100 | awk '{print ($1/$2)*$3}'`
+        percentage_THT=`echo ${coinFlipsTriple["THT"]} 10 100 | awk '{print ($1/$2)*$3}'`
+        percentage_TTH=`echo ${coinFlipsTriple["TTH"]} 10 100 | awk '{print ($1/$2)*$3}'`
+        percentage_TTT=`echo ${coinFlipsTriple["TTT"]} 10 100 | awk '{print ($1/$2)*$3}'`
+
+
+        echo "Percentage of occurence of HHH is $percentage_HHH"
+        echo "Percentage of occurence of HHT is $percentage_HHT"
+        echo "Percentage of occurence of HTH is $percentage_HTH"
+        echo "Percentage of occurence of HTT is $percentage_HTT"
+        echo "Percentage of occurence of THH is $percentage_THH"
+        echo "Percentage of occurence of THT is $percentage_THT"
+        echo "Percentage of occurence of TTH is $percentage_TTH"
+        echo "Percentage of occurence of TTT is $percentage_TTT"
+
+
+}
+
 singlet
 doublet
-
+triplet
