@@ -3,6 +3,28 @@
 declare -A coinFlipsSingle
 declare -A coinFlipsDouble
 declare -A coinFlipsTriple
+
+function sorting()
+{
+	arr=("$@")
+        n=${#arr[@]}
+        for ((i = 0; i<n; i++))
+        do
+                for((j = 0; j<n-i-1; j++))
+                do
+                        if [ ${arr[j]} -gt ${arr[$((j+1))]} ]
+                        then
+                                temp=${arr[j]}
+                                arr[$j]=${arr[$((j+1))]}
+                                arr[$((j+1))]=$temp
+                        fi
+                done
+        done
+	echo "Array in ascending order is:"${arr[@]} > /dev/stderr
+	#echo "The winning combination is: ${arr[$((n-1))]}"
+	echo ${arr[$((n-1))]}
+}
+
 function singlet()
 {
         coinFlipsSingle["heads"]=0
@@ -28,6 +50,16 @@ function singlet()
 
         echo "Percentage of occurence of heads is $percentage_head"
         echo "Percentage of occurence of tails is $percentage_tail"
+
+	max=`sorting ${coinFlipsSingle[@]}`
+        for index in ${!coinFlipsSingle[@]}
+        do
+                if [ ${coinFlipsSingle[$index]} -eq $max ]
+		then
+			echo "Winning combination is: $index"
+		fi
+        done
+
 }
 
 function doublet()
@@ -69,6 +101,15 @@ function doublet()
         echo "Percentage of occurence of HT is $percentage_HT"
         echo "Percentage of occurence of TH is $percentage_TH"
         echo "Percentage of occurence of TT is $percentage_TT"
+
+	max=`sorting ${coinFlipsDouble[@]}`
+	for index in ${!coinFlipsDouble[@]}
+        do
+                if [ ${coinFlipsDouble[$index]} -eq $max ]
+		then
+			echo "The winning combination is $index"
+		fi
+        done
 
 }
 
@@ -142,9 +183,19 @@ function triplet()
         echo "Percentage of occurence of TTH is $percentage_TTH"
         echo "Percentage of occurence of TTT is $percentage_TTT"
 
+	max=`sorting ${coinFlipsTriple[@]}`
+	for index in ${!coinFlipsTriple[@]}
+        do
+                if [ ${coinFlipsTriple[$index]} -eq $max ]
+		then
+			echo "The winning combination is $index"
+		fi
+        done
 
+	
 }
 
 singlet
 doublet
 triplet
+
